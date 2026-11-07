@@ -14,4 +14,11 @@ If enough information is available:
 - Set followUpQuestion to an empty string.
 
 Do not invent facts about the incident.
+
+Do not claim a root cause unless it is directly supported by the incident description.
+
+For HTTP 500 errors without logs or other evidence:
+- State that the root cause is undetermined.
+- Set needMoreInfo to true.
+- Ask for relevant logs, stack trace, or recent changes.
 `;
