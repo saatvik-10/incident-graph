@@ -1,19 +1,25 @@
 import type { GraphNode } from '@langchain/langgraph';
 import type { IncidentStateType } from '../state';
+import { incidentAnalyzer } from '../../providers/llm.provider';
+import { incidentAnalysisPrompt } from '../../prompts/incident-analysis.prompt';
 
-export const analyzeIncident: GraphNode<IncidentStateType> = (state) => {
-  console.log('Analyzing Incident');
+export const analyzeIncident: GraphNode<IncidentStateType> = async (state) => {
+  console.log('Analyzing Incident with LLM...');
 
-  const userInput = state.userInput.toLowerCase();
-
-  const needsMoreInfo =
-    userInput.includes('500') && !userInput.includes('database is down');
+  const res = await incidentAnalyzer.invoke([
+    {
+      role: 'system',
+      content: incidentAnalysisPrompt,
+    },
+    {
+      role: 'user',
+      content: state.userInput,
+    },
+  ]);
 
   return {
-    analysis: 'API may be experiencing a database connection issue',
-    needsMoreInfo,
-    followUpQuestion: needsMoreInfo
-      ? 'Are database connection errors appearing in the logs?'
-      : '',
+    analysis: res.analysis,
+    needMoreInfo: res.needMoreInfo,
+    followUpQuestion: res.followUpQuestion,
   };
 };
