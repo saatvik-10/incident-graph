@@ -1,9 +1,12 @@
-import type { GraphNode } from '@langchain/langgraph';
-import type { IncidentStateType } from '../state';
+import { interrupt } from '@langchain/langgraph';
 
-export const requestDetails: GraphNode<IncidentStateType> = (state) => {
-  console.log('Requesting more details...');
-  console.log(state.followUpQuestion);
+export async function requestDetails() {
+  const additionalInfo = interrupt({
+    type: 'request_details',
+    question: 'Please provide additional incident details...',
+  });
 
-  return {};
-};
+  return {
+    additionalInfo,
+  };
+}

@@ -7,6 +7,7 @@ export const IncidentState = new StateSchema({
   needMoreInfo: z.boolean().default(false),
   followUpQuestion: z.string().default(''),
   diagnosis: z.string().default(''),
+  additionalInfo: z.string().default(''),
 });
 
 export type IncidentStateType = typeof IncidentState.State;
